@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="col-lg-8">
+
+        <!-- Title -->
+        <h3 class="mt-4">{{article.title}}</h3>
+
+        <!-- Author -->
+        <p class="lead">
+     
+        {{article.author}} Tarafından Yayınlandı
+          
+        </p>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>{{article.create_date}}</p>
+
+         {% if article.article_image %}
+          <hr>
+
+
+          <img class="img-fluid rounded" src="{{article.article_image.url}}" alt="">
+          
+         {% else %}
+         {% endif %}
+        
+
+        <hr>
+
+        <!-- Post Content -->
+        <p class="lead">
+        {{article.content|safe}}
+        </p>
+
+        
+        <hr>
+        {% if comments %}
+        {% for comment in comments  %}
+        <div class="media mb-4">
+         <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+           <div class="media-body">
+            <h5 class="mt-0">{{comment.comment_author}}</h5>
+            {{comment.comment_content}}
+            <p>
+            {{comment.comment_date}}
+          </div>
+        </div>
+        <hr>
+        {% endfor %}
+        {% else %}
+         <div class="alert alert-danger">
+                     Bu Makaleye Henüz bir yorum yapılmamış.
+        </div>
+        {% endif %}
+        <div class="card my-4">
+          <h5 class="card-header">Yorum Yaz:</h5>
+          <div class="card-body">
+            <form method="POST" action = "{% url 'article:comment' article.id %}">
+            {% csrf_token %}
+              <div class="form-group">
+                <label for="formGroupExampleInput">İsminiz</label>
+                <input type="text" class="form-control" name="commentAuthor" id="formGroupExampleInput" placeholder="İsminizi Yazınız...">
+              </div>
+              <div class="form-group">
+                <label for="formGroupExampleInput">Yorumunuz</label>
+                <textarea class="form-control" rows="3" name="commentContent"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Yorum Yaz</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      
+
+{% endblock body %}

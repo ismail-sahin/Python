@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block body %}
+<form class="card card-sm">
+{% csrf_token %}
+  <div class="card-body row no-gutters align-items-center">
+    <div class="col-auto">
+      <i class="fas fa-search h4 text-body"></i>
+      </div>
+      <!--end of col-->
+        <div class="col">
+          <input class="form-control form-control-lg form-control-borderless" name="Keyword"  type="text" placeholder="Lütfen Arama Yapmak İçin Bir Kelime Giriniz.. ">
+        </div>
+        <!--end of col-->
+        <div class="col-auto">
+          <button class="btn btn-lg btn-success" type="submit">Ara</button>
+        </div>
+        <!--end of col-->
+    </div>
+</form>
+<hr>
+{% if articles %}
+
+    {% for article in articles %}
+        <div class="col-lg-8">
+
+        <!-- Title -->
+        <h3 class="mt-4">{{article.title}}</h3>
+
+        <!-- Author -->
+        <p class="lead">
+           {{article.author}} Tarafından Yayınlandı
+          
+        </p>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>{{article.create_date}}</p>
+
+         {% if article.article_image %}
+          <hr>
+
+
+          <img class="img-fluid rounded" src="{{article.article_image.url}}" alt="">
+          
+         {% else %}
+         {% endif %}
+        
+
+        <hr>
+
+        <!-- Post Content -->
+        <p class="lead">
+        {{article.content|safe|truncatewords:20}} 
+        
+        <a style="float:right;" href="{% url 'article:detail' article.id %}">Devamını Oku</a>
+        </p>
+        
+        <hr>
+
+
+      </div>
+    {% endfor %}
+
+{% else %}
+    <div class="alert alert-danger">
+                     Henüz bir makale bulunmamaktadır.
+    </div>
+{% endif %}
+
+{% endblock body %}
+
